@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,6 @@
         :root {
             --bg-base: #03060f;
             --bg-card: rgba(10, 16, 30, 0.65);
-            --bg-card-hover: rgba(16, 24, 46, 0.9);
             --border-card: rgba(0, 242, 254, 0.08);
             --border-hover: rgba(0, 242, 254, 0.35);
             --accent-cyan: #00f2fe;
@@ -126,9 +124,7 @@
         .stat-content h3 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; color: #fff; line-height: 1.1; }
         .stat-content p { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; letter-spacing: 0.2px; }
 
-        .dashboard-main { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; }
-        @media (max-width: 1024px) { .dashboard-main { grid-template-columns: 1fr; } }
-
+        /* Full-width accounts grid now (terminal removed) */
         .card-box {
             background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 24px; padding: 26px;
             backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -136,20 +132,22 @@
             animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s backwards;
         }
         .card-box::before { content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px; background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.3), transparent); }
-        .box-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .box-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); flex-wrap: wrap; gap: 12px; }
         .box-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: -0.2px; }
         .box-title i { font-size: 18px; filter: drop-shadow(0 0 8px currentColor); }
 
-        .accounts-list { display: flex; flex-direction: column; gap: 18px; max-height: 720px; overflow-y: auto; padding-right: 6px; }
-        .accounts-list::-webkit-scrollbar { width: 6px; }
-        .accounts-list::-webkit-scrollbar-track { background: transparent; }
-        .accounts-list::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple)); border-radius: 3px; }
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 18px;
+        }
 
         .account-card {
             background: linear-gradient(135deg, rgba(10, 15, 30, 0.7), rgba(15, 22, 42, 0.5));
             border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 18px; padding: 22px;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            cursor: pointer;
         }
         .account-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple), transparent); opacity: 0; transition: opacity 0.4s ease; }
         .account-card:hover { background: linear-gradient(135deg, rgba(16, 24, 46, 0.9), rgba(20, 30, 55, 0.7)); border-color: var(--border-hover); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0, 242, 254, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06); }
@@ -207,30 +205,7 @@
         .icon-btn.success:hover { background: rgba(0, 255, 136, 0.15); color: var(--accent-green); border-color: var(--accent-green); transform: translateY(-2px) rotate(45deg); box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3); }
         .icon-btn.warning:hover { background: rgba(255, 170, 0, 0.15); color: var(--accent-amber); border-color: var(--accent-amber); transform: translateY(-2px) rotate(-8deg); box-shadow: 0 4px 12px rgba(255, 170, 0, 0.3); }
 
-        .logs-box { display: flex; flex-direction: column; height: 100%; }
-        .log-stream {
-            flex: 1; min-height: 480px; max-height: 720px; background: linear-gradient(180deg, #02040a, #040810);
-            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 16px;
-            font-family: 'JetBrains Mono', monospace; font-size: 12px; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 8px; box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5); position: relative;
-        }
-        .log-stream::before { content: ''; position: sticky; top: 0; left: 0; right: 0; height: 20px; background: linear-gradient(180deg, #02040a, transparent); z-index: 2; margin: -16px -16px 0; pointer-events: none; }
-        .log-stream::-webkit-scrollbar { width: 6px; }
-        .log-stream::-webkit-scrollbar-track { background: transparent; }
-        .log-stream::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent-green), var(--accent-cyan)); border-radius: 3px; }
-        .log-item { line-height: 1.5; word-break: break-all; padding: 6px 10px; border-radius: 8px; border-left: 2px solid transparent; transition: all 0.2s ease; animation: log-in 0.3s ease-out; }
-        @keyframes log-in { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        .log-item:hover { background: rgba(255, 255, 255, 0.03); }
-        .log-item:has(.log-info) { border-left-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
-        .log-item:has(.log-success) { border-left-color: #4ade80; background: rgba(74, 222, 128, 0.05); }
-        .log-item:has(.log-warning) { border-left-color: #fbbf24; background: rgba(251, 191, 36, 0.05); }
-        .log-item:has(.log-error) { border-left-color: #f87171; background: rgba(248, 113, 113, 0.05); }
-        .log-time { color: #475569; margin-right: 8px; font-weight: 500; font-size: 11px; }
-        .log-info { color: #38bdf8; }
-        .log-success { color: #4ade80; }
-        .log-warning { color: #fbbf24; }
-        .log-error { color: #f87171; }
-
+        /* Modals */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(3, 6, 15, 0.85);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none;
@@ -243,7 +218,10 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 242, 254, 0.1);
             position: relative; overflow: hidden; transform: scale(0.9) translateY(20px);
             animation: modal-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            max-height: 90vh; overflow-y: auto;
         }
+        .modal-card::-webkit-scrollbar { width: 6px; }
+        .modal-card::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple)); border-radius: 3px; }
         @keyframes modal-in { to { transform: scale(1) translateY(0); } }
         .modal-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink)); background-size: 200% 100%; animation: gradient-shift 3s linear infinite; }
         .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
@@ -264,6 +242,47 @@
         .empty-state i { font-size: 48px; margin-bottom: 16px; color: rgba(255, 255, 255, 0.08); display: block; }
         .empty-state p { font-size: 14px; line-height: 1.6; }
 
+        /* Tabs inside account detail modal */
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 14px; }
+        .tab {
+            flex: 1; padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease; text-align: center; color: var(--text-muted);
+            border: 1px solid transparent;
+        }
+        .tab:hover { color: #fff; background: rgba(255,255,255,0.03); }
+        .tab.active {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(127, 0, 255, 0.12));
+            color: var(--accent-cyan); border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 4px 14px rgba(0, 242, 254, 0.15);
+        }
+
+        /* History / Logs stream */
+        .mini-stream {
+            background: linear-gradient(180deg, #02040a, #040810); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px; padding: 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+            max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
+        }
+        .mini-stream::-webkit-scrollbar { width: 5px; }
+        .mini-stream::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent-green), var(--accent-cyan)); border-radius: 3px; }
+        .mini-log { padding: 6px 10px; border-radius: 8px; line-height: 1.5; word-break: break-all; border-left: 2px solid transparent; }
+        .mini-log.log-info { border-left-color: #38bdf8; background: rgba(56, 189, 248, 0.05); color: #7dd3fc; }
+        .mini-log.log-success { border-left-color: #4ade80; background: rgba(74, 222, 128, 0.05); color: #86efac; }
+        .mini-log.log-warning { border-left-color: #fbbf24; background: rgba(251, 191, 36, 0.05); color: #fcd34d; }
+        .mini-log.log-error { border-left-color: #f87171; background: rgba(248, 113, 113, 0.05); color: #fca5a5; }
+        .mini-time { color: #475569; margin-right: 6px; font-size: 11px; }
+
+        /* History row */
+        .history-row {
+            display: grid; grid-template-columns: 40px 1fr 1fr 1fr; gap: 10px; align-items: center;
+            padding: 10px 14px; background: rgba(255,255,255,0.02); border-radius: 10px;
+            border-left: 2px solid var(--accent-cyan); margin-bottom: 6px; font-size: 12px;
+        }
+        .history-row .h-match { font-weight: 700; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; }
+        .history-row .h-time { color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+        .history-row .h-exp { color: var(--accent-green); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+        .history-row .h-lvl { color: #c084fc; font-weight: 700; }
+
+        /* Toast */
         .toast-container { position: fixed; top: 24px; right: 24px; z-index: 200; display: flex; flex-direction: column; gap: 10px; }
         .toast {
             background: rgba(12, 18, 36, 0.95); border: 1px solid var(--border-card); border-radius: 14px;
@@ -280,12 +299,14 @@
         @media (max-width: 768px) {
             body { padding: 14px; }
             header { flex-direction: column; gap: 16px; padding: 18px; }
-            .header-actions { width: 100%; }
+            .header-actions { width: 100%; flex-wrap: wrap; }
             .header-actions .btn { flex: 1; justify-content: center; }
             .exp-box { grid-template-columns: 1fr; gap: 10px; }
             .acc-top { flex-direction: column; align-items: flex-start; }
             .stat-content h3 { font-size: 22px; }
             .brand-text h1 { font-size: 17px; }
+            .accounts-grid { grid-template-columns: 1fr; }
+            .tabs { flex-direction: column; }
         }
         ::selection { background: rgba(0, 242, 254, 0.3); color: #fff; }
     </style>
@@ -309,6 +330,7 @@
                 </div>
             </div>
             <div class="header-actions">
+                <button class="btn btn-secondary" onclick="openGlobalLogs()"><i class="fa-solid fa-scroll"></i> Live Logs</button>
                 <button class="btn btn-secondary" onclick="fetchStats(true)"><i class="fa-solid fa-rotate"></i> Refresh</button>
                 <button class="btn btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add Account</button>
             </div>
@@ -345,38 +367,22 @@
             </div>
         </div>
 
-        <div class="dashboard-main">
-            <div class="card-box">
-                <div class="box-header">
-                    <div class="box-title">
-                        <i class="fa-solid fa-user-astronaut" style="color:var(--accent-cyan)"></i>
-                        <span>Live Accounts — Click to Expand</span>
-                    </div>
-                    <span style="font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
-                        <i class="fa-solid fa-hand-pointer" style="color:var(--accent-cyan)"></i>
-                        Click a card for details
-                    </span>
+        <div class="card-box">
+            <div class="box-header">
+                <div class="box-title">
+                    <i class="fa-solid fa-user-astronaut" style="color:var(--accent-cyan)"></i>
+                    <span>Active Accounts</span>
                 </div>
-                <div class="accounts-list" id="accounts-container">
-                    <div class="empty-state">
-                        <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--accent-cyan);"></i>
-                        <p>Loading active accounts...</p>
-                    </div>
-                </div>
+                <span style="font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-hand-pointer" style="color:var(--accent-cyan)"></i>
+                    Click any card to view history & logs
+                </span>
             </div>
-
-            <div class="card-box logs-box">
-                <div class="box-header">
-                    <div class="box-title">
-                        <i class="fa-solid fa-terminal" style="color:var(--accent-green)"></i>
-                        <span>Live Match & Bot Logs</span>
-                    </div>
-                    <span style="font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
-                        <span class="pulse-dot" style="width:6px; height:6px;"></span>
-                        Real-time
-                    </span>
+            <div class="accounts-grid" id="accounts-container">
+                <div class="empty-state" style="grid-column: 1/-1;">
+                    <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--accent-cyan);"></i>
+                    <p>Loading active accounts...</p>
                 </div>
-                <div class="log-stream" id="log-stream"></div>
             </div>
         </div>
     </div>
@@ -420,9 +426,9 @@
         </div>
     </div>
 
-    <!-- ACCOUNT DETAILS MODAL (click on card) -->
+    <!-- ACCOUNT DETAIL MODAL (Tabs: Overview / History / Logs) -->
     <div class="modal-overlay" id="detail-modal">
-        <div class="modal-card" style="max-width: 600px;">
+        <div class="modal-card" style="max-width: 720px;">
             <div class="modal-header">
                 <h3><i class="fa-solid fa-id-card" style="color:var(--accent-cyan);"></i> Account Details</h3>
                 <button class="icon-btn" onclick="closeDetailModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -431,10 +437,26 @@
         </div>
     </div>
 
+    <!-- GLOBAL LOGS MODAL -->
+    <div class="modal-overlay" id="logs-modal">
+        <div class="modal-card" style="max-width: 780px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-terminal" style="color:var(--accent-green);"></i> Live Global Logs</h3>
+                <button class="icon-btn" onclick="closeGlobalLogs()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="mini-stream" id="global-log-stream" style="max-height: 500px;">
+                <div style="color:var(--text-muted);text-align:center;padding:20px;">Loading logs...</div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        let startTime = Date.now();
         let previousLogsHash = '';
         let lastAccountsData = {};
+        let currentDetailUid = null;
+        let currentDetailTab = 'overview';
+        let detailRefreshTimer = null;
+        let globalLogsTimer = null;
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -450,9 +472,31 @@
             }, 3000);
         }
 
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
         function openAddModal() { document.getElementById('add-modal').classList.add('active'); }
         function closeAddModal() { document.getElementById('add-modal').classList.remove('active'); }
-        function closeDetailModal() { document.getElementById('detail-modal').classList.remove('active'); }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.remove('active');
+            currentDetailUid = null;
+            if (detailRefreshTimer) { clearInterval(detailRefreshTimer); detailRefreshTimer = null; }
+        }
+
+        function openGlobalLogs() {
+            document.getElementById('logs-modal').classList.add('active');
+            refreshGlobalLogs();
+            if (globalLogsTimer) clearInterval(globalLogsTimer);
+            globalLogsTimer = setInterval(refreshGlobalLogs, 2500);
+        }
+
+        function closeGlobalLogs() {
+            document.getElementById('logs-modal').classList.remove('active');
+            if (globalLogsTimer) { clearInterval(globalLogsTimer); globalLogsTimer = null; }
+        }
 
         function toggleFormType() {
             const type = document.getElementById('acc-type').value;
@@ -495,6 +539,7 @@
                 await fetch('/api/account/stop', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid }) });
                 showToast('Account stopped', 'warning');
                 fetchStats();
+                if (currentDetailUid === uid) refreshDetail();
             } catch (err) { showToast('Stop failed', 'error'); }
         }
 
@@ -504,6 +549,7 @@
                 await fetch('/api/account/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid }) });
                 showToast('Account started!', 'success');
                 fetchStats();
+                if (currentDetailUid === uid) refreshDetail();
             } catch (err) { showToast('Start failed', 'error'); }
         }
 
@@ -514,6 +560,7 @@
             try {
                 await fetch('/api/account/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid }) });
                 showToast('Account deleted permanently', 'error');
+                closeDetailModal();
                 fetchStats();
             } catch (err) { showToast('Delete failed', 'error'); }
         }
@@ -524,67 +571,168 @@
                 await fetch('/api/account/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid }) });
                 showToast('Profile refreshed', 'success');
                 fetchStats();
+                if (currentDetailUid === uid) refreshDetail();
             } catch (err) { showToast('Refresh failed', 'error'); }
         }
 
-        function showAccountDetails(uid) {
-            const acc = lastAccountsData[uid];
-            if (!acc) return;
-            const gained = acc.gained_exp || 0;
-            const statusColor = acc.is_stopped ? 'var(--accent-red)' : (acc.status === 'IN_MATCH' ? 'var(--accent-cyan)' : 'var(--accent-green)');
-            const content = `
-                <div style="text-align:center; margin-bottom:24px;">
-                    <div style="width:80px;height:80px;margin:0 auto 14px;border-radius:22px;background:linear-gradient(135deg,#1e293b,#334155);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--accent-cyan);border:2px solid ${statusColor};box-shadow:0 0 30px ${statusColor}40;">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <h2 style="font-size:22px;font-weight:800;">${escapeHtml(acc.nickname)}</h2>
-                    <p style="font-family:'JetBrains Mono';color:var(--text-muted);font-size:13px;margin-top:4px;">UID: ${acc.uid}</p>
-                    <span class="acc-status ${acc.is_stopped ? 'status-stopped' : (acc.status === 'IN_MATCH' ? 'status-match' : 'status-online')}" style="margin-top:12px;display:inline-flex;">
-                        <span class="pulse-dot"></span> ${acc.is_stopped ? 'STOPPED' : acc.status}
-                    </span>
-                </div>
-                <div class="exp-box" style="grid-template-columns:1fr 1fr;gap:14px;">
-                    <div class="exp-item"><span class="exp-label">Level</span><span class="exp-val">${acc.level}</span></div>
-                    <div class="exp-item"><span class="exp-label">Region</span><span class="exp-val">${acc.region || 'BD'}</span></div>
-                    <div class="exp-item"><span class="exp-label">Initial EXP</span><span class="exp-val">${acc.initial_exp.toLocaleString()}</span></div>
-                    <div class="exp-item"><span class="exp-label">Current EXP</span><span class="exp-val">${acc.current_exp.toLocaleString()}</span></div>
-                    <div class="exp-item"><span class="exp-label">Gained</span><span class="exp-val exp-gained"><span class="gained-badge">+${gained.toLocaleString()}</span></span></div>
-                    <div class="exp-item"><span class="exp-label">Likes</span><span class="exp-val">${(acc.likes || 0).toLocaleString()}</span></div>
-                    <div class="exp-item"><span class="exp-label">Matches Played</span><span class="exp-val">${acc.matches_played}</span></div>
-                    <div class="exp-item"><span class="exp-label">Active Matches</span><span class="exp-val" style="color:var(--accent-cyan)">${acc.active_matches}</span></div>
-                </div>
-                <div style="display:flex;justify-content:center;gap:10px;margin-top:24px;flex-wrap:wrap;">
-                    ${acc.is_stopped
-                        ? `<button class="btn btn-primary" onclick="startAccount('${acc.uid}');closeDetailModal();"><i class="fa-solid fa-play"></i> Start</button>`
-                        : `<button class="btn" style="background:rgba(255,170,0,0.15);color:var(--accent-amber);border:1px solid rgba(255,170,0,0.3);" onclick="stopAccount('${acc.uid}');closeDetailModal();"><i class="fa-solid fa-pause"></i> Stop</button>`}
-                    <button class="btn btn-secondary" onclick="refreshAccountInfo('${acc.uid}');"><i class="fa-solid fa-rotate"></i> Refresh</button>
-                    <button class="btn" style="background:rgba(255,51,102,0.12);color:var(--accent-red);border:1px solid rgba(255,51,102,0.3);" onclick="deleteAccount('${acc.uid}');closeDetailModal();"><i class="fa-solid fa-trash"></i> Delete</button>
-                </div>
-            `;
-            document.getElementById('detail-content').innerHTML = content;
+        // ============ ACCOUNT DETAIL ============
+        async function showAccountDetails(uid) {
+            currentDetailUid = uid;
+            currentDetailTab = 'overview';
             document.getElementById('detail-modal').classList.add('active');
+            await refreshDetail();
+
+            if (detailRefreshTimer) clearInterval(detailRefreshTimer);
+            detailRefreshTimer = setInterval(refreshDetail, 3000);
         }
 
+        function switchDetailTab(tab) {
+            currentDetailTab = tab;
+            renderDetailContent();
+        }
+
+        let cachedDetail = null;
+
+        async function refreshDetail() {
+            if (!currentDetailUid) return;
+            try {
+                const res = await fetch('/api/account/detail?uid=' + encodeURIComponent(currentDetailUid));
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    cachedDetail = data;
+                    renderDetailContent();
+                }
+            } catch (err) {
+                console.error('Detail fetch failed', err);
+            }
+        }
+
+        function renderDetailContent() {
+            if (!cachedDetail) {
+                document.getElementById('detail-content').innerHTML = `<div style="text-align:center;padding:30px;color:var(--text-muted);"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading...</div>`;
+                return;
+            }
+            const acc = cachedDetail.account || {};
+            const isStopped = acc.is_stopped;
+            const statusColor = isStopped ? 'var(--accent-red)' : (acc.status === 'IN_MATCH' ? 'var(--accent-cyan)' : 'var(--accent-green)');
+            const statusText = isStopped ? 'STOPPED' : (acc.status || 'ONLINE');
+
+            // Header
+            let html = `
+                <div style="text-align:center; margin-bottom:22px;">
+                    <div style="width:72px;height:72px;margin:0 auto 12px;border-radius:20px;background:linear-gradient(135deg,#1e293b,#334155);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--accent-cyan);border:2px solid ${statusColor};box-shadow:0 0 30px ${statusColor}40;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h2 style="font-size:20px;font-weight:800;">${escapeHtml(acc.nickname || 'Unknown')}</h2>
+                    <p style="font-family:'JetBrains Mono';color:var(--text-muted);font-size:12px;margin-top:4px;">UID: ${acc.uid}</p>
+                    <span class="acc-status ${isStopped ? 'status-stopped' : (acc.status === 'IN_MATCH' ? 'status-match' : 'status-online')}" style="margin-top:10px;display:inline-flex;">
+                        <span class="pulse-dot"></span> ${statusText}
+                    </span>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab ${currentDetailTab === 'overview' ? 'active' : ''}" onclick="switchDetailTab('overview')"><i class="fa-solid fa-chart-line"></i> Overview</div>
+                    <div class="tab ${currentDetailTab === 'history' ? 'active' : ''}" onclick="switchDetailTab('history')"><i class="fa-solid fa-clock-rotate-left"></i> Match History</div>
+                    <div class="tab ${currentDetailTab === 'logs' ? 'active' : ''}" onclick="switchDetailTab('logs')"><i class="fa-solid fa-terminal"></i> Logs</div>
+                </div>
+            `;
+
+            if (currentDetailTab === 'overview') {
+                html += `
+                    <div class="exp-box" style="grid-template-columns:1fr 1fr;gap:14px;">
+                        <div class="exp-item"><span class="exp-label">Level</span><span class="exp-val">${acc.level || 1}</span></div>
+                        <div class="exp-item"><span class="exp-label">Region</span><span class="exp-val">${acc.region || 'BD'}</span></div>
+                        <div class="exp-item"><span class="exp-label">Initial EXP</span><span class="exp-val">${(acc.initial_exp || 0).toLocaleString()}</span></div>
+                        <div class="exp-item"><span class="exp-label">Current EXP</span><span class="exp-val">${(acc.current_exp || 0).toLocaleString()}</span></div>
+                        <div class="exp-item"><span class="exp-label">Gained</span><span class="exp-val exp-gained"><span class="gained-badge">+${(acc.gained_exp || 0).toLocaleString()}</span></span></div>
+                        <div class="exp-item"><span class="exp-label">Likes</span><span class="exp-val">${(acc.likes || 0).toLocaleString()}</span></div>
+                        <div class="exp-item"><span class="exp-label">Matches</span><span class="exp-val">${acc.matches_played || 0}</span></div>
+                        <div class="exp-item"><span class="exp-label">Active Matches</span><span class="exp-val" style="color:var(--accent-cyan)">${acc.active_matches || 0}</span></div>
+                        <div class="exp-item"><span class="exp-label">Last Match</span><span class="exp-val">${acc.last_match_time || '—'}</span></div>
+                        <div class="exp-item"><span class="exp-label">Started</span><span class="exp-val" style="font-size:12px">${acc.started_at || '—'}</span></div>
+                    </div>
+
+                    <div style="display:flex;justify-content:center;gap:10px;margin-top:24px;flex-wrap:wrap;">
+                        ${isStopped
+                            ? `<button class="btn btn-primary" onclick="startAccount('${acc.uid}')"><i class="fa-solid fa-play"></i> Start</button>`
+                            : `<button class="btn" style="background:rgba(255,170,0,0.15);color:var(--accent-amber);border:1px solid rgba(255,170,0,0.3);" onclick="stopAccount('${acc.uid}')"><i class="fa-solid fa-pause"></i> Stop</button>`}
+                        <button class="btn btn-secondary" onclick="refreshAccountInfo('${acc.uid}')"><i class="fa-solid fa-rotate"></i> Refresh Profile</button>
+                        <button class="btn" style="background:rgba(255,51,102,0.12);color:var(--accent-red);border:1px solid rgba(255,51,102,0.3);" onclick="deleteAccount('${acc.uid}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div>
+                `;
+            } else if (currentDetailTab === 'history') {
+                const history = cachedDetail.history || [];
+                if (history.length === 0) {
+                    html += `<div class="empty-state" style="padding:40px 20px;"><i class="fa-solid fa-inbox"></i><p>No matches played yet.<br>The bot is still searching for matches.</p></div>`;
+                } else {
+                    html += `<div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;text-align:center;">Showing last ${history.length} matches</div>`;
+                    // Reverse: newest first
+                    const reversed = [...history].reverse();
+                    html += reversed.map(h => `
+                        <div class="history-row">
+                            <div class="h-match">#${h.match_num}</div>
+                            <div class="h-time">${h.time}</div>
+                            <div class="h-exp">+${(h.gained_exp || 0).toLocaleString()} EXP</div>
+                            <div class="h-lvl">Lv.${h.level}</div>
+                        </div>
+                    `).join('');
+                }
+            } else if (currentDetailTab === 'logs') {
+                const logs = cachedDetail.logs || [];
+                if (logs.length === 0) {
+                    html += `<div class="empty-state" style="padding:40px 20px;"><i class="fa-solid fa-inbox"></i><p>No logs for this account yet.</p></div>`;
+                } else {
+                    html += `<div class="mini-stream">${logs.slice().reverse().map(log => 
+                        `<div class="mini-log log-${log.level}"><span class="mini-time">[${log.time}]</span>${escapeHtml(log.message)}</div>`
+                    ).join('')}</div>`;
+                }
+            }
+
+            document.getElementById('detail-content').innerHTML = html;
+        }
+
+        // ============ GLOBAL LOGS ============
+        async function refreshGlobalLogs() {
+            try {
+                const res = await fetch('/api/logs');
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    const stream = document.getElementById('global-log-stream');
+                    if (!data.logs || data.logs.length === 0) {
+                        stream.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:20px;">No logs yet.</div>`;
+                        return;
+                    }
+                    const reversed = [...data.logs].reverse();
+                    const newHtml = reversed.map(log => 
+                        `<div class="mini-log log-${log.level}"><span class="mini-time">[${log.time}]</span>${escapeHtml(log.message)}</div>`
+                    ).join('');
+                    const newHash = String(newHtml.length) + (data.logs[data.logs.length-1]?.message || '');
+                    if (previousLogsHash !== newHash) {
+                        stream.innerHTML = newHtml;
+                        previousLogsHash = newHash;
+                    }
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        // ============ MAIN STATS FETCH ============
         async function fetchStats(manual = false) {
             try {
                 const res = await fetch('/api/stats');
                 const data = await res.json();
 
-                // Top stats
                 const online = data.accounts.filter(a => !a.is_stopped && (a.status === 'ONLINE' || a.status === 'IN_MATCH' || a.status === 'SEARCHING')).length;
                 document.getElementById('stat-total-accounts').innerText = data.total_accounts;
                 document.getElementById('stat-online-accounts').innerText = online;
                 document.getElementById('stat-total-matches').innerText = data.total_matches;
                 document.getElementById('stat-total-exp').innerText = '+' + data.total_gained_exp.toLocaleString() + ' EXP';
 
-                // Store for detail view
                 lastAccountsData = {};
                 data.accounts.forEach(a => { lastAccountsData[a.uid] = a; });
 
-                // Render accounts
                 const container = document.getElementById('accounts-container');
                 if (data.accounts.length === 0) {
-                    container.innerHTML = `<div class="empty-state">
+                    container.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;">
                         <i class="fa-solid fa-ghost"></i>
                         <p>No active accounts running.<br>Click <b style="color: var(--accent-cyan);">"+ Add Account"</b> to start!</p>
                     </div>`;
@@ -600,7 +748,7 @@
                         const progressPercent = Math.min(100, Math.max(5, ((acc.current_exp % 1000) / 10)));
 
                         return `
-                            <div class="account-card ${isStopped ? 'is-stopped' : ''}" onclick="showAccountDetails('${acc.uid}')" style="cursor:pointer;">
+                            <div class="account-card ${isStopped ? 'is-stopped' : ''}" onclick="showAccountDetails('${acc.uid}')">
                                 <div class="acc-top">
                                     <div class="acc-profile">
                                         <div class="acc-avatar ${isStopped ? 'stopped' : ''}"><i class="fa-solid fa-user"></i></div>
@@ -617,15 +765,15 @@
 
                                 <div class="exp-box">
                                     <div class="exp-item">
-                                        <span class="exp-label">Initial EXP</span>
+                                        <span class="exp-label">Initial</span>
                                         <span class="exp-val">${acc.initial_exp.toLocaleString()}</span>
                                     </div>
                                     <div class="exp-item">
-                                        <span class="exp-label">Current EXP</span>
+                                        <span class="exp-label">Current</span>
                                         <span class="exp-val">${acc.current_exp.toLocaleString()}</span>
                                     </div>
                                     <div class="exp-item">
-                                        <span class="exp-label">EXP Gained</span>
+                                        <span class="exp-label">Gained</span>
                                         <span class="exp-val exp-gained">
                                             <span class="gained-badge">+${gainedExp.toLocaleString()}</span>
                                         </span>
@@ -657,19 +805,6 @@
                     }).join('');
                 }
 
-                // Render Logs
-                const logContainer = document.getElementById('log-stream');
-                const logHtml = data.logs.map(log => {
-                    return `<div class="log-item"><span class="log-time">[${log.time}]</span><span class="log-${log.level}">${escapeHtml(log.message)}</span></div>`;
-                }).join('');
-
-                const newHash = String(logHtml.length) + String(data.logs.length) + (data.logs[data.logs.length - 1] ? data.logs[data.logs.length - 1].message : '');
-                if (previousLogsHash !== newHash) {
-                    logContainer.innerHTML = logHtml;
-                    logContainer.scrollTop = logContainer.scrollHeight;
-                    previousLogsHash = newHash;
-                }
-
                 if (manual) showToast('Dashboard refreshed', 'success');
             } catch (err) {
                 console.error("Failed to fetch stats:", err);
@@ -677,27 +812,15 @@
             }
         }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
-
-        // Uptime
-        setInterval(() => {
-            const sec = Math.floor((Date.now() - startTime) / 1000);
-            const h = String(Math.floor(sec / 3600)).padStart(2, '0');
-            const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
-            const s = String(sec % 60).padStart(2, '0');
-            // (uptime shown in header only if needed)
-        }, 1000);
-
         // Modal close on overlay/ESC
         document.getElementById('add-modal').addEventListener('click', function(e) { if (e.target === this) closeAddModal(); });
         document.getElementById('detail-modal').addEventListener('click', function(e) { if (e.target === this) closeDetailModal(); });
+        document.getElementById('logs-modal').addEventListener('click', function(e) { if (e.target === this) closeGlobalLogs(); });
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') { closeAddModal(); closeDetailModal(); }
+            if (e.key === 'Escape') { closeAddModal(); closeDetailModal(); closeGlobalLogs(); }
         });
 
+        // Initial + polling
         fetchStats();
         setInterval(fetchStats, 2500);
     </script>
