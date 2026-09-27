@@ -1,0 +1,15 @@
+{
+    "7509279396": {
+        "unique_device_id": "Google|211413e5-d2e6-45c1-bc72-96b11e0f64a9",
+        "brand": "OPPO",
+        "model": "CPH2611",
+        "gpu_renderer": "Adreno (TM) 720",
+        "system_software": "Android OS 14 / API-34",
+        "screen_width": 1440,
+        "screen_height": 1600,
+        "screen_dpi": "321",
+        "memory": 4054,
+        "processor_details": "ARM64 FP ASIMD AES VMH | 2943 | 8",
+        "client_ip": "113.113.124.223"
+    }
+}
