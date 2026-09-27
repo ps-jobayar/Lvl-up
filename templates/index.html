@@ -1,1 +1,705 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEAM 84FF | FreeFire Level Up Bot Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-base: #03060f;
+            --bg-card: rgba(10, 16, 30, 0.65);
+            --bg-card-hover: rgba(16, 24, 46, 0.9);
+            --border-card: rgba(0, 242, 254, 0.08);
+            --border-hover: rgba(0, 242, 254, 0.35);
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-purple: #7f00ff;
+            --accent-pink: #ff00e5;
+            --accent-green: #00ff88;
+            --accent-red: #ff3366;
+            --accent-amber: #ffaa00;
+            --text-main: #f0f4fc;
+            --text-muted: #7a88a6;
+            --glass-glow: 0 8px 40px 0 rgba(0, 242, 254, 0.06);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-base);
+            background-image:
+                radial-gradient(ellipse at 10% 0%, rgba(127, 0, 255, 0.18) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 100%, rgba(0, 242, 254, 0.14) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(79, 172, 254, 0.05) 0%, transparent 70%),
+                linear-gradient(180deg, #03060f 0%, #060913 50%, #04070f 100%);
+            color: var(--text-main); min-height: 100vh; padding: 24px; overflow-x: hidden; position: relative;
+        }
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: linear-gradient(rgba(0, 242, 254, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px; pointer-events: none; z-index: 0;
+            mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+        }
+        .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.4; pointer-events: none; z-index: 0; animation: float-orb 20s infinite ease-in-out; }
+        .orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(127, 0, 255, 0.4), transparent 70%); top: -100px; left: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(0, 242, 254, 0.3), transparent 70%); bottom: -200px; right: -150px; animation-delay: -7s; }
+        .orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 0, 229, 0.2), transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -14s; }
+        @keyframes float-orb { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(60px, -40px) scale(1.1); } 66% { transform: translate(-40px, 60px) scale(0.9); } }
+        .container { max-width: 1440px; margin: 0 auto; position: relative; z-index: 1; }
+
+        header {
+            display: flex; align-items: center; justify-content: space-between; padding: 20px 28px;
+            background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 24px;
+            backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
+            box-shadow: var(--glass-glow), inset 0 1px 0 rgba(255, 255, 255, 0.05); margin-bottom: 24px;
+            position: relative; overflow: hidden; animation: slide-down 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.5), transparent); }
+        @keyframes slide-down { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .brand { display: flex; align-items: center; gap: 16px; }
+        .logo-box {
+            width: 52px; height: 52px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+            background-size: 200% 200%; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 24px; color: #fff; box-shadow: 0 0 30px rgba(0, 242, 254, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.2);
+            animation: pulse-glow 3s infinite alternate, gradient-shift 6s infinite ease; position: relative;
+        }
+        .logo-box::after { content: ''; position: absolute; inset: -2px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink)); border-radius: 18px; z-index: -1; filter: blur(12px); opacity: 0.7; }
+        @keyframes gradient-shift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes pulse-glow { 0% { box-shadow: 0 0 20px rgba(0, 242, 254, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.15); } 100% { box-shadow: 0 0 35px rgba(127, 0, 255, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.25); } }
+        .brand-text h1 {
+            font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #ffffff, var(--accent-cyan), #ffffff); background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shine-text 4s linear infinite;
+        }
+        @keyframes shine-text { to { background-position: 200% center; } }
+        .brand-text p { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+        .live-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3); color: var(--accent-green); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 0 12px rgba(0, 255, 136, 0.15); }
+        .pulse-dot { width: 7px; height: 7px; background: var(--accent-green); border-radius: 50%; animation: blink 1.2s infinite; box-shadow: 0 0 8px var(--accent-green); }
+        @keyframes blink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 14px;
+            font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none; outline: none; position: relative; overflow: hidden; letter-spacing: 0.2px;
+        }
+        .btn i { transition: transform 0.3s ease; }
+        .btn:hover i { transform: scale(1.15) rotate(-5deg); }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); color: #040914; box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3); }
+        .btn-primary::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); opacity: 0; transition: opacity 0.3s ease; }
+        .btn-primary:hover::before { opacity: 1; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 242, 254, 0.5); }
+        .btn-primary > * { position: relative; z-index: 1; }
+        .btn-secondary { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-card); color: var(--text-main); backdrop-filter: blur(10px); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--border-hover); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0, 242, 254, 0.1); }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-bottom: 24px; }
+        .stat-card {
+            background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 20px; padding: 22px;
+            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+            display: flex; align-items: center; gap: 18px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative; overflow: hidden; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            animation: slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+        .stat-card:nth-child(1) { animation-delay: 0.05s; }
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.15s; }
+        .stat-card:nth-child(4) { animation-delay: 0.2s; }
+        @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: linear-gradient(180deg, var(--accent-cyan), transparent); opacity: 0; transition: opacity 0.3s ease; }
+        .stat-card:hover { border-color: var(--border-hover); transform: translateY(-4px); box-shadow: var(--glass-glow), 0 12px 40px rgba(0, 0, 0, 0.3); }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-icon {
+            width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 22px; position: relative; transition: all 0.4s ease; flex-shrink: 0;
+        }
+        .stat-card:hover .stat-icon { transform: scale(1.1) rotate(-5deg); }
+        .stat-icon.cyan { background: rgba(0, 242, 254, 0.12); color: var(--accent-cyan); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2), inset 0 0 20px rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.2); }
+        .stat-icon.green { background: rgba(0, 255, 136, 0.12); color: var(--accent-green); box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 0 20px rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.2); }
+        .stat-icon.purple { background: rgba(127, 0, 255, 0.15); color: #c084fc; box-shadow: 0 0 20px rgba(127, 0, 255, 0.25), inset 0 0 20px rgba(127, 0, 255, 0.1); border: 1px solid rgba(127, 0, 255, 0.25); }
+        .stat-icon.amber { background: rgba(255, 170, 0, 0.12); color: var(--accent-amber); box-shadow: 0 0 20px rgba(255, 170, 0, 0.2), inset 0 0 20px rgba(255, 170, 0, 0.1); border: 1px solid rgba(255, 170, 0, 0.2); }
+        .stat-content h3 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; color: #fff; line-height: 1.1; }
+        .stat-content p { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; letter-spacing: 0.2px; }
+
+        .dashboard-main { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; }
+        @media (max-width: 1024px) { .dashboard-main { grid-template-columns: 1fr; } }
+
+        .card-box {
+            background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 24px; padding: 26px;
+            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+            position: relative; overflow: hidden; box-shadow: var(--glass-glow), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s backwards;
+        }
+        .card-box::before { content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px; background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.3), transparent); }
+        .box-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .box-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: -0.2px; }
+        .box-title i { font-size: 18px; filter: drop-shadow(0 0 8px currentColor); }
+
+        .accounts-list { display: flex; flex-direction: column; gap: 18px; max-height: 720px; overflow-y: auto; padding-right: 6px; }
+        .accounts-list::-webkit-scrollbar { width: 6px; }
+        .accounts-list::-webkit-scrollbar-track { background: transparent; }
+        .accounts-list::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple)); border-radius: 3px; }
+
+        .account-card {
+            background: linear-gradient(135deg, rgba(10, 15, 30, 0.7), rgba(15, 22, 42, 0.5));
+            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 18px; padding: 22px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+        .account-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple), transparent); opacity: 0; transition: opacity 0.4s ease; }
+        .account-card:hover { background: linear-gradient(135deg, rgba(16, 24, 46, 0.9), rgba(20, 30, 55, 0.7)); border-color: var(--border-hover); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0, 242, 254, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06); }
+        .account-card:hover::before { opacity: 1; }
+        .account-card.is-stopped { opacity: 0.7; border-color: rgba(255, 51, 102, 0.25); }
+        .account-card.is-stopped::before { background: linear-gradient(90deg, transparent, var(--accent-red), transparent); opacity: 1; }
+
+        .acc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px; }
+        .acc-profile { display: flex; align-items: center; gap: 14px; min-width: 0; }
+        .acc-avatar {
+            width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #1e293b, #334155);
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;
+            color: var(--accent-cyan); border: 1px solid rgba(0, 242, 254, 0.25);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.15), inset 0 0 20px rgba(0, 242, 254, 0.05);
+            flex-shrink: 0; position: relative;
+        }
+        .acc-avatar::after { content: ''; position: absolute; bottom: -2px; right: -2px; width: 12px; height: 12px; background: var(--accent-green); border-radius: 50%; border: 2px solid var(--bg-base); box-shadow: 0 0 8px var(--accent-green); }
+        .acc-avatar.stopped::after { background: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
+        .acc-info { min-width: 0; flex: 1; }
+        .acc-info h4 { font-size: 16px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .region-badge { background: linear-gradient(135deg, rgba(79, 172, 254, 0.15), rgba(127, 0, 255, 0.15)); color: #a5b4fc; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; border: 1px solid rgba(127, 0, 255, 0.2); flex-shrink: 0; }
+        .acc-info span { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.3px; }
+
+        .acc-status {
+            display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700;
+            padding: 5px 12px; border-radius: 20px; white-space: nowrap; letter-spacing: 0.3px; flex-shrink: 0;
+        }
+        .status-online { background: rgba(0, 255, 136, 0.1); color: var(--accent-green); border: 1px solid rgba(0, 255, 136, 0.3); box-shadow: 0 0 12px rgba(0, 255, 136, 0.15); }
+        .status-match { background: rgba(0, 242, 254, 0.12); color: var(--accent-cyan); border: 1px solid rgba(0, 242, 254, 0.4); box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); animation: pulse-border 1.5s infinite alternate; }
+        .status-stopped { background: rgba(255, 51, 102, 0.12); color: var(--accent-red); border: 1px solid rgba(255, 51, 102, 0.4); }
+        @keyframes pulse-border { 0% { box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); } 100% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.5); } }
+
+        .exp-box { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; background: rgba(0, 0, 0, 0.35); padding: 14px 16px; border-radius: 14px; margin-bottom: 16px; border: 1px solid rgba(255, 255, 255, 0.03); box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3); }
+        .exp-item { display: flex; flex-direction: column; gap: 4px; }
+        .exp-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.8px; }
+        .exp-val { font-size: 15px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #fff; letter-spacing: -0.3px; }
+        .exp-gained { color: var(--accent-green) !important; }
+        .gained-badge { background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 242, 254, 0.1)); padding: 4px 9px; border-radius: 8px; font-size: 12px; font-weight: 700; border: 1px solid rgba(0, 255, 136, 0.25); box-shadow: 0 0 12px rgba(0, 255, 136, 0.15); display: inline-block; font-family: 'JetBrains Mono', monospace; }
+
+        .level-progress { margin-bottom: 16px; }
+        .level-labels { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px; font-weight: 600; }
+        .progress-bar-bg { height: 8px; background: rgba(255, 255, 255, 0.06); border-radius: 10px; overflow: hidden; position: relative; box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3); }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green), var(--accent-cyan)); background-size: 200% 100%; border-radius: 10px; transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 12px rgba(0, 242, 254, 0.6); animation: progress-shine 2s linear infinite; }
+        @keyframes progress-shine { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+
+        .acc-actions { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.05); font-size: 12px; color: var(--text-muted); gap: 12px; }
+        .action-btns { display: flex; gap: 8px; flex-shrink: 0; }
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-card); color: var(--text-muted);
+            width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-size: 13px;
+        }
+        .icon-btn:hover { background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); transform: translateY(-2px) rotate(45deg); box-shadow: 0 4px 12px rgba(0, 242, 254, 0.3); }
+        .icon-btn.danger:hover { background: rgba(255, 51, 102, 0.15); color: var(--accent-red); border-color: var(--accent-red); transform: translateY(-2px) rotate(-8deg); box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3); }
+        .icon-btn.success:hover { background: rgba(0, 255, 136, 0.15); color: var(--accent-green); border-color: var(--accent-green); transform: translateY(-2px) rotate(45deg); box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3); }
+        .icon-btn.warning:hover { background: rgba(255, 170, 0, 0.15); color: var(--accent-amber); border-color: var(--accent-amber); transform: translateY(-2px) rotate(-8deg); box-shadow: 0 4px 12px rgba(255, 170, 0, 0.3); }
+
+        .logs-box { display: flex; flex-direction: column; height: 100%; }
+        .log-stream {
+            flex: 1; min-height: 480px; max-height: 720px; background: linear-gradient(180deg, #02040a, #040810);
+            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 16px;
+            font-family: 'JetBrains Mono', monospace; font-size: 12px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 8px; box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5); position: relative;
+        }
+        .log-stream::before { content: ''; position: sticky; top: 0; left: 0; right: 0; height: 20px; background: linear-gradient(180deg, #02040a, transparent); z-index: 2; margin: -16px -16px 0; pointer-events: none; }
+        .log-stream::-webkit-scrollbar { width: 6px; }
+        .log-stream::-webkit-scrollbar-track { background: transparent; }
+        .log-stream::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent-green), var(--accent-cyan)); border-radius: 3px; }
+        .log-item { line-height: 1.5; word-break: break-all; padding: 6px 10px; border-radius: 8px; border-left: 2px solid transparent; transition: all 0.2s ease; animation: log-in 0.3s ease-out; }
+        @keyframes log-in { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .log-item:hover { background: rgba(255, 255, 255, 0.03); }
+        .log-item:has(.log-info) { border-left-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
+        .log-item:has(.log-success) { border-left-color: #4ade80; background: rgba(74, 222, 128, 0.05); }
+        .log-item:has(.log-warning) { border-left-color: #fbbf24; background: rgba(251, 191, 36, 0.05); }
+        .log-item:has(.log-error) { border-left-color: #f87171; background: rgba(248, 113, 113, 0.05); }
+        .log-time { color: #475569; margin-right: 8px; font-weight: 500; font-size: 11px; }
+        .log-info { color: #38bdf8; }
+        .log-success { color: #4ade80; }
+        .log-warning { color: #fbbf24; }
+        .log-error { color: #f87171; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(3, 6, 15, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none;
+            align-items: center; justify-content: center; z-index: 100; padding: 20px; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-card {
+            background: linear-gradient(135deg, #0c1224, #0a0e1c); border: 1px solid var(--border-card);
+            border-radius: 24px; width: 100%; max-width: 500px; padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 242, 254, 0.1);
+            position: relative; overflow: hidden; transform: scale(0.9) translateY(20px);
+            animation: modal-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes modal-in { to { transform: scale(1) translateY(0); } }
+        .modal-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink)); background-size: 200% 100%; animation: gradient-shift 3s linear infinite; }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .modal-header h3 { font-size: 19px; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: -0.3px; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.2px; }
+        .form-input {
+            width: 100%; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; padding: 12px 16px; color: #fff; font-size: 14px; outline: none;
+            transition: all 0.3s ease; font-family: 'Outfit', sans-serif;
+        }
+        .form-input:focus { border-color: var(--accent-cyan); background: rgba(0, 242, 254, 0.05); box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.1), 0 0 20px rgba(0, 242, 254, 0.1); }
+        .form-input::placeholder { color: rgba(255, 255, 255, 0.25); }
+        select.form-input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a88a6' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
+        select.form-input option { background: #0c1224; color: #fff; }
+        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); animation: fade-in 0.6s ease; }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        .empty-state i { font-size: 48px; margin-bottom: 16px; color: rgba(255, 255, 255, 0.08); display: block; }
+        .empty-state p { font-size: 14px; line-height: 1.6; }
+
+        .toast-container { position: fixed; top: 24px; right: 24px; z-index: 200; display: flex; flex-direction: column; gap: 10px; }
+        .toast {
+            background: rgba(12, 18, 36, 0.95); border: 1px solid var(--border-card); border-radius: 14px;
+            padding: 14px 20px; backdrop-filter: blur(20px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            display: flex; align-items: center; gap: 12px; min-width: 280px;
+            animation: toast-in 0.4s cubic-bezier(0.16, 1, 0.3, 1); font-size: 14px; font-weight: 500;
+        }
+        @keyframes toast-in { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+        .toast.success { border-left: 3px solid var(--accent-green); }
+        .toast.error { border-left: 3px solid var(--accent-red); }
+        .toast.info { border-left: 3px solid var(--accent-cyan); }
+        .toast.warning { border-left: 3px solid var(--accent-amber); }
+
+        @media (max-width: 768px) {
+            body { padding: 14px; }
+            header { flex-direction: column; gap: 16px; padding: 18px; }
+            .header-actions { width: 100%; }
+            .header-actions .btn { flex: 1; justify-content: center; }
+            .exp-box { grid-template-columns: 1fr; gap: 10px; }
+            .acc-top { flex-direction: column; align-items: flex-start; }
+            .stat-content h3 { font-size: 22px; }
+            .brand-text h1 { font-size: 17px; }
+        }
+        ::selection { background: rgba(0, 242, 254, 0.3); color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="toast-container" id="toast-container"></div>
+
+    <div class="container">
+        <header>
+            <div class="brand">
+                <div class="logo-box"><i class="fa-solid fa-bolt"></i></div>
+                <div class="brand-text">
+                    <h1>TEAM 84FF <span style="font-weight:400; color:var(--text-muted); font-size:16px;">| LEVEL UP BOT</span></h1>
+                    <p>
+                        <span class="live-tag"><span class="pulse-dot"></span> System Live</span>
+                        <span>• Safe Multi-Match Engine</span>
+                    </p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="fetchStats(true)"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                <button class="btn btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add Account</button>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon cyan"><i class="fa-solid fa-users"></i></div>
+                <div class="stat-content">
+                    <h3 id="stat-total-accounts">0</h3>
+                    <p>Total Accounts</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="stat-content">
+                    <h3 id="stat-online-accounts" style="color:var(--accent-green)">0</h3>
+                    <p>Online Now</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple"><i class="fa-solid fa-gamepad"></i></div>
+                <div class="stat-content">
+                    <h3 id="stat-total-matches">0</h3>
+                    <p>Matches Completed</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon amber"><i class="fa-solid fa-angles-up"></i></div>
+                <div class="stat-content">
+                    <h3 id="stat-total-exp" style="color:var(--accent-amber)">+0 EXP</h3>
+                    <p>Total EXP Gained</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-main">
+            <div class="card-box">
+                <div class="box-header">
+                    <div class="box-title">
+                        <i class="fa-solid fa-user-astronaut" style="color:var(--accent-cyan)"></i>
+                        <span>Live Accounts — Click to Expand</span>
+                    </div>
+                    <span style="font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+                        <i class="fa-solid fa-hand-pointer" style="color:var(--accent-cyan)"></i>
+                        Click a card for details
+                    </span>
+                </div>
+                <div class="accounts-list" id="accounts-container">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--accent-cyan);"></i>
+                        <p>Loading active accounts...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-box logs-box">
+                <div class="box-header">
+                    <div class="box-title">
+                        <i class="fa-solid fa-terminal" style="color:var(--accent-green)"></i>
+                        <span>Live Match & Bot Logs</span>
+                    </div>
+                    <span style="font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+                        <span class="pulse-dot" style="width:6px; height:6px;"></span>
+                        Real-time
+                    </span>
+                </div>
+                <div class="log-stream" id="log-stream"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD ACCOUNT MODAL -->
+    <div class="modal-overlay" id="add-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-plus" style="color:var(--accent-cyan);"></i> Add New Account</h3>
+                <button class="icon-btn" onclick="closeAddModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="add-acc-form" onsubmit="submitAddAccount(event)">
+                <div class="form-group">
+                    <label>Account Type</label>
+                    <select class="form-input" id="acc-type" onchange="toggleFormType()">
+                        <option value="guest">Guest Account (UID + Password)</option>
+                        <option value="token">Access Token</option>
+                    </select>
+                </div>
+                <div id="guest-fields">
+                    <div class="form-group">
+                        <label>Guest UID</label>
+                        <input type="text" class="form-input" id="acc-uid" placeholder="e.g. 7644913583">
+                    </div>
+                    <div class="form-group">
+                        <label>Guest Password / Secret</label>
+                        <input type="text" class="form-input" id="acc-password" placeholder="e.g. ZERO_GRAVITY_4NM38">
+                    </div>
+                </div>
+                <div id="token-fields" style="display:none;">
+                    <div class="form-group">
+                        <label>Access Token</label>
+                        <textarea class="form-input" id="acc-token" rows="3" placeholder="Paste access token here..."></textarea>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Save & Start</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ACCOUNT DETAILS MODAL (click on card) -->
+    <div class="modal-overlay" id="detail-modal">
+        <div class="modal-card" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-id-card" style="color:var(--accent-cyan);"></i> Account Details</h3>
+                <button class="icon-btn" onclick="closeDetailModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="detail-content"></div>
+        </div>
+    </div>
+
+    <script>
+        let startTime = Date.now();
+        let previousLogsHash = '';
+        let lastAccountsData = {};
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle', warning: 'fa-exclamation-triangle' };
+            const colors = { success: 'var(--accent-green)', error: 'var(--accent-red)', info: 'var(--accent-cyan)', warning: 'var(--accent-amber)' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fa-solid ${icons[type]}" style="color: ${colors[type]}; font-size: 18px;"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'toast-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) reverse';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        function openAddModal() { document.getElementById('add-modal').classList.add('active'); }
+        function closeAddModal() { document.getElementById('add-modal').classList.remove('active'); }
+        function closeDetailModal() { document.getElementById('detail-modal').classList.remove('active'); }
+
+        function toggleFormType() {
+            const type = document.getElementById('acc-type').value;
+            document.getElementById('guest-fields').style.display = type === 'guest' ? 'block' : 'none';
+            document.getElementById('token-fields').style.display = type === 'token' ? 'block' : 'none';
+        }
+
+        async function submitAddAccount(e) {
+            e.preventDefault();
+            const type = document.getElementById('acc-type').value;
+            let payload = {};
+            if (type === 'guest') {
+                const uid = document.getElementById('acc-uid').value.trim();
+                const password = document.getElementById('acc-password').value.trim();
+                if (!uid || !password) { showToast('Please enter both UID and Password', 'error'); return; }
+                payload = { uid, password };
+            } else {
+                const token = document.getElementById('acc-token').value.trim();
+                if (!token) { showToast('Please enter token', 'error'); return; }
+                payload = { token };
+            }
+            try {
+                const res = await fetch('/api/account/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    closeAddModal();
+                    document.getElementById('add-acc-form').reset();
+                    showToast('Account added successfully!', 'success');
+                    fetchStats();
+                } else {
+                    showToast('Error: ' + (data.error || 'Unknown'), 'error');
+                }
+            } catch (err) { showToast('Request failed: ' + err, 'error'); }
+        }
+
+        async function stopAccount(uid, ev) {
+            if (ev) ev.stopPropagation();
+            if (!confirm('Stop level-up for account ' + uid + '?')) return;
+            try {
+                await fetch('/api/account/stop', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid }) });
+                showToast('Account stopped', 'warning');
+                fetchStats();
+            } catch (err) { showToast('Stop failed', 'error'); }
+        }
+
+        async function startAccount(uid, ev) {
+            if (ev) ev.stopPropagation();
+            try {
+                await fetch('/api/account/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid }) });
+                showToast('Account started!', 'success');
+                fetchStats();
+            } catch (err) { showToast('Start failed', 'error'); }
+        }
+
+        async function deleteAccount(uid, ev) {
+            if (ev) ev.stopPropagation();
+            if (!confirm('⚠ PERMANENTLY DELETE account ' + uid + '?\n\nThis will remove all credentials and the account will NOT work again!')) return;
+            if (!confirm('Are you REALLY sure? This action cannot be undone.')) return;
+            try {
+                await fetch('/api/account/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid }) });
+                showToast('Account deleted permanently', 'error');
+                fetchStats();
+            } catch (err) { showToast('Delete failed', 'error'); }
+        }
+
+        async function refreshAccountInfo(uid, ev) {
+            if (ev) ev.stopPropagation();
+            try {
+                await fetch('/api/account/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid }) });
+                showToast('Profile refreshed', 'success');
+                fetchStats();
+            } catch (err) { showToast('Refresh failed', 'error'); }
+        }
+
+        function showAccountDetails(uid) {
+            const acc = lastAccountsData[uid];
+            if (!acc) return;
+            const gained = acc.gained_exp || 0;
+            const statusColor = acc.is_stopped ? 'var(--accent-red)' : (acc.status === 'IN_MATCH' ? 'var(--accent-cyan)' : 'var(--accent-green)');
+            const content = `
+                <div style="text-align:center; margin-bottom:24px;">
+                    <div style="width:80px;height:80px;margin:0 auto 14px;border-radius:22px;background:linear-gradient(135deg,#1e293b,#334155);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--accent-cyan);border:2px solid ${statusColor};box-shadow:0 0 30px ${statusColor}40;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h2 style="font-size:22px;font-weight:800;">${escapeHtml(acc.nickname)}</h2>
+                    <p style="font-family:'JetBrains Mono';color:var(--text-muted);font-size:13px;margin-top:4px;">UID: ${acc.uid}</p>
+                    <span class="acc-status ${acc.is_stopped ? 'status-stopped' : (acc.status === 'IN_MATCH' ? 'status-match' : 'status-online')}" style="margin-top:12px;display:inline-flex;">
+                        <span class="pulse-dot"></span> ${acc.is_stopped ? 'STOPPED' : acc.status}
+                    </span>
+                </div>
+                <div class="exp-box" style="grid-template-columns:1fr 1fr;gap:14px;">
+                    <div class="exp-item"><span class="exp-label">Level</span><span class="exp-val">${acc.level}</span></div>
+                    <div class="exp-item"><span class="exp-label">Region</span><span class="exp-val">${acc.region || 'BD'}</span></div>
+                    <div class="exp-item"><span class="exp-label">Initial EXP</span><span class="exp-val">${acc.initial_exp.toLocaleString()}</span></div>
+                    <div class="exp-item"><span class="exp-label">Current EXP</span><span class="exp-val">${acc.current_exp.toLocaleString()}</span></div>
+                    <div class="exp-item"><span class="exp-label">Gained</span><span class="exp-val exp-gained"><span class="gained-badge">+${gained.toLocaleString()}</span></span></div>
+                    <div class="exp-item"><span class="exp-label">Likes</span><span class="exp-val">${(acc.likes || 0).toLocaleString()}</span></div>
+                    <div class="exp-item"><span class="exp-label">Matches Played</span><span class="exp-val">${acc.matches_played}</span></div>
+                    <div class="exp-item"><span class="exp-label">Active Matches</span><span class="exp-val" style="color:var(--accent-cyan)">${acc.active_matches}</span></div>
+                </div>
+                <div style="display:flex;justify-content:center;gap:10px;margin-top:24px;flex-wrap:wrap;">
+                    ${acc.is_stopped
+                        ? `<button class="btn btn-primary" onclick="startAccount('${acc.uid}');closeDetailModal();"><i class="fa-solid fa-play"></i> Start</button>`
+                        : `<button class="btn" style="background:rgba(255,170,0,0.15);color:var(--accent-amber);border:1px solid rgba(255,170,0,0.3);" onclick="stopAccount('${acc.uid}');closeDetailModal();"><i class="fa-solid fa-pause"></i> Stop</button>`}
+                    <button class="btn btn-secondary" onclick="refreshAccountInfo('${acc.uid}');"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                    <button class="btn" style="background:rgba(255,51,102,0.12);color:var(--accent-red);border:1px solid rgba(255,51,102,0.3);" onclick="deleteAccount('${acc.uid}');closeDetailModal();"><i class="fa-solid fa-trash"></i> Delete</button>
+                </div>
+            `;
+            document.getElementById('detail-content').innerHTML = content;
+            document.getElementById('detail-modal').classList.add('active');
+        }
+
+        async function fetchStats(manual = false) {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+
+                // Top stats
+                const online = data.accounts.filter(a => !a.is_stopped && (a.status === 'ONLINE' || a.status === 'IN_MATCH' || a.status === 'SEARCHING')).length;
+                document.getElementById('stat-total-accounts').innerText = data.total_accounts;
+                document.getElementById('stat-online-accounts').innerText = online;
+                document.getElementById('stat-total-matches').innerText = data.total_matches;
+                document.getElementById('stat-total-exp').innerText = '+' + data.total_gained_exp.toLocaleString() + ' EXP';
+
+                // Store for detail view
+                lastAccountsData = {};
+                data.accounts.forEach(a => { lastAccountsData[a.uid] = a; });
+
+                // Render accounts
+                const container = document.getElementById('accounts-container');
+                if (data.accounts.length === 0) {
+                    container.innerHTML = `<div class="empty-state">
+                        <i class="fa-solid fa-ghost"></i>
+                        <p>No active accounts running.<br>Click <b style="color: var(--accent-cyan);">"+ Add Account"</b> to start!</p>
+                    </div>`;
+                } else {
+                    container.innerHTML = data.accounts.map(acc => {
+                        const gainedExp = acc.gained_exp || 0;
+                        const isStopped = acc.is_stopped;
+                        let statusClass = 'status-online';
+                        let statusText = acc.status;
+                        if (isStopped) { statusClass = 'status-stopped'; statusText = 'STOPPED'; }
+                        else if (acc.status === 'IN_MATCH') { statusClass = 'status-match'; statusText = `In Match (${acc.active_matches})`; }
+                        else if (acc.status === 'SEARCHING') { statusClass = 'status-match'; statusText = 'Searching...'; }
+                        const progressPercent = Math.min(100, Math.max(5, ((acc.current_exp % 1000) / 10)));
+
+                        return `
+                            <div class="account-card ${isStopped ? 'is-stopped' : ''}" onclick="showAccountDetails('${acc.uid}')" style="cursor:pointer;">
+                                <div class="acc-top">
+                                    <div class="acc-profile">
+                                        <div class="acc-avatar ${isStopped ? 'stopped' : ''}"><i class="fa-solid fa-user"></i></div>
+                                        <div class="acc-info">
+                                            <h4>${escapeHtml(acc.nickname)} <span class="region-badge">${acc.region || 'BD'}</span></h4>
+                                            <span>UID: ${acc.uid}</span>
+                                        </div>
+                                    </div>
+                                    <div class="acc-status ${statusClass}">
+                                        <span class="pulse-dot"></span>
+                                        <span>${statusText}</span>
+                                    </div>
+                                </div>
+
+                                <div class="exp-box">
+                                    <div class="exp-item">
+                                        <span class="exp-label">Initial EXP</span>
+                                        <span class="exp-val">${acc.initial_exp.toLocaleString()}</span>
+                                    </div>
+                                    <div class="exp-item">
+                                        <span class="exp-label">Current EXP</span>
+                                        <span class="exp-val">${acc.current_exp.toLocaleString()}</span>
+                                    </div>
+                                    <div class="exp-item">
+                                        <span class="exp-label">EXP Gained</span>
+                                        <span class="exp-val exp-gained">
+                                            <span class="gained-badge">+${gainedExp.toLocaleString()}</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="level-progress">
+                                    <div class="level-labels">
+                                        <span style="color:var(--accent-cyan)">Level ${acc.level}</span>
+                                        <span style="color:var(--text-muted)">Matches: ${acc.matches_played}</span>
+                                    </div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
+                                    </div>
+                                </div>
+
+                                <div class="acc-actions">
+                                    <span>Last match: ${acc.last_match_time || 'Running...'}</span>
+                                    <div class="action-btns">
+                                        ${isStopped
+                                            ? `<button class="icon-btn success" title="Start Level Up" onclick="startAccount('${acc.uid}', event)"><i class="fa-solid fa-play"></i></button>`
+                                            : `<button class="icon-btn warning" title="Stop Level Up" onclick="stopAccount('${acc.uid}', event)"><i class="fa-solid fa-pause"></i></button>`}
+                                        <button class="icon-btn" title="Refresh Profile" onclick="refreshAccountInfo('${acc.uid}', event)"><i class="fa-solid fa-rotate"></i></button>
+                                        <button class="icon-btn danger" title="Delete Account" onclick="deleteAccount('${acc.uid}', event)"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Render Logs
+                const logContainer = document.getElementById('log-stream');
+                const logHtml = data.logs.map(log => {
+                    return `<div class="log-item"><span class="log-time">[${log.time}]</span><span class="log-${log.level}">${escapeHtml(log.message)}</span></div>`;
+                }).join('');
+
+                const newHash = String(logHtml.length) + String(data.logs.length) + (data.logs[data.logs.length - 1] ? data.logs[data.logs.length - 1].message : '');
+                if (previousLogsHash !== newHash) {
+                    logContainer.innerHTML = logHtml;
+                    logContainer.scrollTop = logContainer.scrollHeight;
+                    previousLogsHash = newHash;
+                }
+
+                if (manual) showToast('Dashboard refreshed', 'success');
+            } catch (err) {
+                console.error("Failed to fetch stats:", err);
+                if (manual) showToast('Failed to refresh data', 'error');
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // Uptime
+        setInterval(() => {
+            const sec = Math.floor((Date.now() - startTime) / 1000);
+            const h = String(Math.floor(sec / 3600)).padStart(2, '0');
+            const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+            const s = String(sec % 60).padStart(2, '0');
+            // (uptime shown in header only if needed)
+        }, 1000);
+
+        // Modal close on overlay/ESC
+        document.getElementById('add-modal').addEventListener('click', function(e) { if (e.target === this) closeAddModal(); });
+        document.getElementById('detail-modal').addEventListener('click', function(e) { if (e.target === this) closeDetailModal(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') { closeAddModal(); closeDetailModal(); }
+        });
+
+        fetchStats();
+        setInterval(fetchStats, 2500);
+    </script>
+</body>
+</html>
